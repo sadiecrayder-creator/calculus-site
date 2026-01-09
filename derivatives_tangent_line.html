@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AP Calculus: Tangent Lines and Derivatives</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    canvas {
+      border: 1px solid black;
+      background-color: white;
+    }
+    .slider-container {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+
+<h1>AP Calculus AB: Tangent Lines and Derivatives</h1>
+
+
+<p>
+In AP Calculus, the <strong>derivative</strong> of a function at a point represents the
+<strong>slope of the tangent line</strong> to the graph at that point.
+</p>
+
+
+<p>
+In this visualization, we explore the function:
+</p>
+
+
+<p style="text-align:center;"><strong>f(x) = x²</strong></p>
+
+
+<p>
+The derivative of this function is:
+</p>
+
+
+<p style="text-align:center;"><strong>f′(x) = 2x</strong></p>
+
+
+<p>
+Use the slider below to move the point of tangency along the curve and see how the tangent line changes.
+</p>
+
+
+<canvas id="graph" width="500" height="500"></canvas>
+
+
+<div class="slider-container">
+  <label for="xSlider">x-value: </label>
+  <input type="range" id="xSlider" min="-4" max="4" step="0.1" value="1">
+  <span id="xValue">1</span>
+</div>
+
+
+<script>
+  const canvas = document.getElementById("graph");
+  const ctx = canvas.getContext("2d");
+  const slider = document.getElementById("xSlider");
+  const xValueText = document.getElementById("xValue");
+
+
+  function drawGraph(x0) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+    // Coordinate scaling
+    const scale = 50;
+    const originX = canvas.width / 2;
+    const originY = canvas.height / 2;
+
+
+    // Draw axes
+    ctx.beginPath();
+    ctx.moveTo(0, originY);
+    ctx.lineTo(canvas.width, originY);
+    ctx.moveTo(originX, 0);
+    ctx.lineTo(originX, canvas.height);
+    ctx.stroke();
+
+
+    // Draw f(x) = x^2
+    ctx.beginPath();
+    ctx.strokeStyle = "blue";
+    for (let x = -5; x <= 5; x += 0.01) {
+      let y = x * x;
+      ctx.lineTo(originX + x * scale, originY - y * scale);
+    }
+    ctx.stroke();
+
+
+    // Tangent line
+    const slope = 2 * x0;
+    const y0 = x0 * x0;
+
+
+    ctx.beginPath();
+    ctx.strokeStyle = "red";
+    for (let x = -5; x <= 5; x += 0.1) {
+      let y = slope * (x - x0) + y0;
+      ctx.lineTo(originX + x * scale, originY - y * scale);
+    }
+    ctx.stroke();
+
+
+    // Point of tangency
+    ctx.beginPath();
+    ctx.arc(originX + x0 * scale, originY - y0 * scale, 5, 0, 2 * Math.PI);
+    ctx.fillStyle = "red";
+    ctx.fill();
+  }
+
+
+  slider.addEventListener("input", () => {
+    const x0 = parseFloat(slider.value);
+    xValueText.textContent = x0;
+    drawGraph(x0);
+  });
+
+
+  drawGraph(parseFloat(slider.value));
+</script>
+
+
+</body>
+</html>
